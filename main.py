@@ -6,20 +6,15 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
 if __name__ == '__main__':
-    # You can add the parameter data_home to wherever to where you want to download your data
+    # Download MNIST original data from repo
     mnist = fetch_mldata('MNIST original')
-    print(mnist.data.shape)
-    print(mnist.target.shape)
+
     # test_size: what proportion of original data is used for test set
     train_img, test_img, train_lbl, test_lbl = train_test_split(
         mnist.data, mnist.target, test_size=1 / 7.0, random_state=0)
-    print(train_img.shape)
-    print(train_lbl.shape)
-    print(test_img.shape)
-    print(test_lbl.shape)
 
+    # PCA needs that the data must be standardized
     scaler = StandardScaler()
-
     # Fit on training set only.
     scaler.fit(train_img)
 
@@ -27,10 +22,9 @@ if __name__ == '__main__':
     train_img = scaler.transform(train_img)
     test_img = scaler.transform(test_img)
 
+    # 95% of the variance will be used
     pca = PCA(n_components=.95)
     pca.fit(train_img)
-
-    print(pca.n_components_)
 
     train_img = pca.transform(train_img)
     test_img = pca.transform(test_img)
@@ -42,14 +36,14 @@ if __name__ == '__main__':
     logisticRegr.fit(train_img, train_lbl)
 
     # Returns a NumPy Array
-    # Predict for One Observation (image)
+    # Predict for One Observation
     logisticRegr.predict(test_img[0].reshape(1, -1))
 
-    # Predict for Multiple Observations (images) at Once
+    # Predict for Multiple Observations at Once
     logisticRegr.predict(test_img[0:10])
 
     score = logisticRegr.score(test_img, test_lbl)
-    print(score)
+    print('Score of Logistic Regression: {}'.format(score))
 
     df = pd.DataFrame(data=[[1.00, 784, 48.94, .9158],
                             [.99, 541, 34.69, .9169],

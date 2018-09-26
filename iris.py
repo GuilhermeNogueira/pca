@@ -10,6 +10,7 @@ if __name__ == '__main__':
     y = iris.target
     target_names = iris.target_names
 
+    # Using PCA to reduce iris dataset dimensions
     pca = PCA(n_components=2)
     X_r = pca.fit(X).transform(X)
 
