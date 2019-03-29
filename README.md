@@ -1,2 +1,2 @@
 # pca
-Using PCA to speed up
+Using PCA in Python
